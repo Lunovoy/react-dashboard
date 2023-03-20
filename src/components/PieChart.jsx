@@ -5,7 +5,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { mockPieData as data01 } from "../data/mockData";
 
-const PieChart = ({isDashboard = false}) => {
+const PieChart = ({isDashboard = false, users}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -15,19 +15,11 @@ const PieChart = ({isDashboard = false}) => {
     return data
   }
 
-  const [data, setData] = useState([])
-
-  useEffect( () => {
-    const foo = async () => {
-      const newData = await getData();
-      setData(newData);
-    }
-    foo()
-  }, [])
-
   return (
     <ResponsivePie
-      data={data01}
+    data={users}
+    id="name"
+    value= "score"
       theme={{
         axis: {
           domain: {
@@ -96,31 +88,31 @@ const PieChart = ({isDashboard = false}) => {
           spacing: 10,
         },
       ]}
-      legends={[
-        {
-          anchor: "left",
-          direction: "column",
-          justify: false,
-          translateX: 0,
-          translateY: 56,
-          itemsSpacing: 1,
-          itemWidth: 100,
-          itemHeight: 18,
-          itemTextColor: "#999",
-          itemDirection: "left-to-right",
-          itemOpacity: 1,
-          symbolSize: 18,
-          symbolShape: "circle",
-          effects: [
-            {
-              on: "hover",
-              style: {
-                itemTextColor: "#000",
-              },
-            },
-          ],
-        },
-      ]}
+      // legends={[
+      //   {
+      //     anchor: "left",
+      //     direction: "column",
+      //     justify: false,
+      //     translateX: 0,
+      //     translateY: 56,
+      //     itemsSpacing: 1,
+      //     itemWidth: 100,
+      //     itemHeight: 18,
+      //     itemTextColor: "#999",
+      //     itemDirection: "left-to-right",
+      //     itemOpacity: 1,
+      //     symbolSize: 18,
+      //     symbolShape: "circle",
+      //     effects: [
+      //       {
+      //         on: "hover",
+      //         style: {
+      //           itemTextColor: "#000",
+      //         },
+      //       },
+      //     ],
+      //   },
+      // ]}
     />
   );
 };

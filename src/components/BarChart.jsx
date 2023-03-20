@@ -5,7 +5,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 // import { mockBarData as data } from "../data/mockData";
 
-const BarChart = ({ isDashboard = false }) => {
+const BarChart = ({ isDashboard = false, users }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -15,19 +15,11 @@ const BarChart = ({ isDashboard = false }) => {
     return data
   }
 
-  const [data, setData] = useState([])
 
-  useEffect( () => {
-    const foo = async () => {
-      const newData = await getData();
-      setData(newData);
-    }
-    foo()
-  }, [])
 
   return (
     <ResponsiveBar
-      data={data}
+      data={users}
       theme={{
         // added
         axis: {
@@ -57,13 +49,13 @@ const BarChart = ({ isDashboard = false }) => {
           },
         },
       }}
-      keys={["a", "score", "sandwich", "kebab", "fries", "donut"]}
+      keys={["score"]}
       indexBy="name"
       margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
       padding={0.3}
       valueScale={{ type: "linear" }}
       indexScale={{ type: "band", round: true }}
-      colors={{ scheme: "nivo" }}
+      colors={{ scheme: "dark2" }}
       defs={[
         {
           id: "dots",
@@ -86,7 +78,7 @@ const BarChart = ({ isDashboard = false }) => {
       ]}
       borderColor={{
         from: "color",
-        modifiers: [["darker", "1.6"]],
+        modifiers: [["darker", "3"]],
       }}
       axisTop={null}
       axisRight={null}

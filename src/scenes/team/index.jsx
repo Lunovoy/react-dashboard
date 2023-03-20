@@ -1,9 +1,7 @@
 import { Box, Typography, useTheme, Button} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
-import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
+import { useNavigate } from 'react-router-dom'
 import Header from "../../components/Header";
 import React from "preact/compat";
 import axios from "axios";
@@ -14,15 +12,25 @@ const Team = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
+  const navigate = useNavigate()
+
+  const [selectionModel, setSelectionModel] = useState([]);
+
   const [tags, setTags] = useState([])
 
   const getFilteredData = async () => {
-    const otvet = await axios.post('http://localhost:8000/api/v1/aspirants-filter-technologies/', tags);
+    const stringTags = tags.map(item => `${item}`)
+    const otvet = await axios.post('http://localhost:8000/api/v1/aspirants-filter-technologies/',{ 
+      technologies: stringTags
+    });
     const newData = otvet.data;
-    console.log(newData)
+    setData(newData)
   }
 
-
+  const goDashboard = () => {
+   const url = `list_b[]=${selectionModel.reduce((item, val) => val = val + `&list_b[]=${item}`)}`
+   navigate(`dashboard?${url}`)
+  }
 
   // candidatesID = []
   // technologies = []
@@ -87,16 +95,11 @@ const Team = () => {
     },
   ];
   useEffect( () => {
-    const foo2 = async () => {
-      const newData = await getFilteredData();
-      setTags(newData);
-    }
     const foo = async () => {
       const newData = await getData();
       setData(newData);
     }
     foo()
-    foo2()
   }, [])
     return (
     <Box m="20px">
@@ -114,6 +117,7 @@ const Team = () => {
               fontWeight: "bold",
               padding: "10px 20px",
             }}
+            onClick={goDashboard}
           >
             Перейти к сравнению
           </Button>
@@ -149,7 +153,13 @@ const Team = () => {
           },
         }}
       >
-        <DataGrid checkboxSelection rows={data} columns={columns} />
+        <DataGrid 
+         checkboxSelection 
+         rows={data} 
+         columns={columns} 
+         selectionModel={selectionModel}
+         onSelectionModelChange={newSelectionModel => setSelectionModel(newSelectionModel)}
+        />
       </Box>
     </Box>
   );
