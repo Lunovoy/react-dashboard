@@ -28,33 +28,93 @@ const Dashboard = () => {
   const colors = tokens(theme.palette.mode);
 
   const [data, setData] = useState([])
+  const [winRateData, setWinRateData] = useState([])
+  const [categoryIncomeData, setCategoryIncomeData] = useState([])
+  const [yearMoneyIncomeData, setYearMoneyIncomeData] = useState([])
+  const [completedContractsData, setCompletedContractsData] = useState([])
+  const [radarData, setRadarData] = useState([])
 
   const location = useLocation()
   const parametrs = new URLSearchParams(location.search);
-  const usersId = parametrs.getAll('list_b[]')
+  const usersId = parametrs.getAll('list_id')
 
+
+   const getRadarData = async () => {
+      const response = await axios.post('http://localhost:8000/api/radar/',{
+         id: usersId[0]
+      })
+      const users = response.data
+      return users
+   }
+   const getCompletedContractsData = async () => {
+      const response = await axios.post('http://localhost:8000/api/contracts/',{
+         id: usersId[0]
+      })
+      const users = response.data
+      return users
+   }
+   const getYearMoneyIncomeData = async () => {
+      const response = await axios.post('http://localhost:8000/api/date-price/',{
+         id: usersId[0]
+      })
+      const users = response.data
+      return users
+   }
+   const getCategoryIncomeData = async () => {
+      const response = await axios.post('http://localhost:8000/api/category/',{
+         id: usersId[0]
+      })
+      const users = response.data
+      return users
+   }
+   const getWinRateData = async () => {
+      const response = await axios.post('http://localhost:8000/api/get-winrate/',{
+         id: usersId[0]
+      })
+      const users = response.data
+      return users
+   }
    const getData = async () => {
-      const response = await axios.post('http://localhost:8000/api/v1/aspirants-filter-id/',{
-         id: usersId
+    console.log(usersId[0])
+      const response = await axios.post('http://localhost:8000/api/get-company/',{
+         id: usersId[0]
       })
       const users = response.data
       return users
    }
 
-  useEffect( () => {
-   const foo = async () => {
-     const newData = await getData();
-     newData.sort((a, b) => b.score - a.score) 
-     setData(newData);
-   }
-   foo()
- }, [])
+
   
+    useEffect( () => {
+     const foo = async () => {
+       const newData = await getData();
+      //  newData.sort((a, b) => b.score - a.score) 
+       setData(newData);
+  
+       const newWinRateData = await getWinRateData();
+       setWinRateData(newWinRateData);
+
+       const newRadarData = await getRadarData();
+       setRadarData(newRadarData);
+
+     
+
+       const newCompletedContractsData = await getCompletedContractsData();
+       setCompletedContractsData(newCompletedContractsData);
+  
+       const newCategoryIncomeData = await getCategoryIncomeData();
+       setCategoryIncomeData(newCategoryIncomeData);
+  
+       const newYearMoneyIncomeData = await getYearMoneyIncomeData();
+       setYearMoneyIncomeData(newYearMoneyIncomeData);
+     }
+     foo()
+   }, [])
   return (
     <Box m="20px">
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header title="Сравнение кандидатов" subtitle="" />
+        <Header title="Сравнение" subtitle="" />
 
         <Box>
           <Button
@@ -81,78 +141,63 @@ const Dashboard = () => {
       >
         {/* ROW 1 */}
         <Box
-          gridColumn="span 3"
+          gridColumn="span 4"
           backgroundColor={colors.primary[400]}
           display="flex"
           alignItems="center"
           justifyContent="center"
         >
           <StatBox
-            name= {data[0] ? data[0].name : " "}
-            score={data[0] ? data[0].score : " "}
+            header= {data[0] ? data[0].name : " "}
+            property={"ИНН"}
+            subheader={data[0] ? data[0].supplier_inn : " "}
+            size = "0"
+            icon={
+              <PersonAddIcon
+                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+              />
+            }
+          />
+        </Box>
+        <Box
+          gridColumn="span 4"
+          backgroundColor={colors.primary[400]}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <StatBox
+            header= {"Номер ОКВЭД"}
+            subheader={data[0] ? data[0].okved : " "}
+            size = "0"
+          />
+
+        </Box>
+        <Box
+          gridColumn="span 4"
+          backgroundColor={colors.primary[400]}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <StatBox
+            header= {"Процент побед в котировочных сессиях"}
+            percent= {winRateData.winrate}
+            progress= {winRateData.winrate/100}
             icon={
               <EmojiEventsIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
+            
           />
-        </Box>
-        <Box
-          gridColumn="span 3"
-          backgroundColor={colors.primary[400]}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <StatBox
-            name= {data[1] ? data[1].name : " "}
-            score={data[1] ? data[1].score : " "}
-            icon={
-              <LooksTwoIcon
-                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-              />
-            }
-          />
-        </Box>
-        <Box
-          gridColumn="span 3"
-          backgroundColor={colors.primary[400]}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <StatBox
-            name= {data[2] ? data[2].name : " "}
-            score={data[2] ? data[2].score : " "}
-            icon={
-              <Looks3Icon
-                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-              />
-            }
-          />
-        </Box>
-        <Box
-          gridColumn="span 3"
-          backgroundColor={colors.primary[400]}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <StatBox
-            name= {data[3] ? data[3].name : " "}
-            score={data[3] ? data[3].score : " "}
-            icon={
-              <Looks4Icon
-                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-              />
-            }
-          />
+          
         </Box>
 
         {/* ROW 2 */}
         <Box
           gridColumn="span 8"
-          gridRow="span 2"
+          gridRow="span 3"
           backgroundColor={colors.primary[400]}
         >
           <Box
@@ -168,7 +213,7 @@ const Dashboard = () => {
                 fontWeight="600"
                 color={colors.grey[100]}
               >
-                Столбчатая диаграмма
+                Доход по годам
               </Typography>
               <Typography
                 variant="h3"
@@ -178,14 +223,15 @@ const Dashboard = () => {
               </Typography>
             </Box>
           </Box>
-          <Box height="250px" m="-20px 0 0 0">
-          <BarChart isDashboard={true} users={data} />
+          <Box height="400px" m="-20px 0 0 0">
+          <BarChart isDashboard={true} data={yearMoneyIncomeData} />
                        
           </Box>
         </Box>
+        
         <Box
           gridColumn="span 4"
-          gridRow="span 2"
+          gridRow="span 3"
           backgroundColor={colors.primary[400]}
           overflow="auto"
         >
@@ -198,12 +244,12 @@ const Dashboard = () => {
             p="15px"
           >
             <Typography color={colors.grey[100]} variant="h5" fontWeight="600">
-              Список выбранных кандидатов
+              Завершенные поставки
             </Typography>
           </Box>
-          {data.map((val, i) => (
+          {completedContractsData.map((val, i) => (
             <Box
-              key={`${val.name}-${i}`}
+              key={`${val.id}-${i}`}
               display="flex"
               justifyContent="space-between"
               alignItems="center"
@@ -216,10 +262,10 @@ const Dashboard = () => {
                   variant="h5"
                   fontWeight="600"
                 >
-                  {val.name}
+                  {val.data}
                 </Typography>
                 <Typography color={colors.grey[100]}>
-                  {val.email}
+                  {val.id}
                 </Typography>
               </Box>
               <Box color={colors.grey[100]}></Box>
@@ -228,13 +274,78 @@ const Dashboard = () => {
                 p="5px 10px"
                 borderRadius="4px"
               >
-                {val.score}
+                {val.price}₽
               </Box>
             </Box>
           ))}
         </Box>
-
         {/* ROW 3 */}
+        <Box
+          gridColumn="span 10"
+          gridRow="span 4"
+          backgroundColor={colors.primary[400]}
+        >
+          <Box
+            mt="25px"
+            p="0 30px"
+            display="flex "
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Box>
+              <Typography
+                variant="h5"
+                fontWeight="600"
+                color={colors.grey[100]}
+              >
+                Прогноз на следующий год
+              </Typography>
+              <Typography
+                variant="h3"
+                fontWeight="bold"
+                color={colors.greenAccent[500]}
+              >
+              </Typography>
+            </Box>
+          </Box>
+          <Box height="400px" m="-20px 0 0 0">
+          {/* <LineChart /> */}
+                       
+          </Box>
+        </Box>
+        {/* ROW 4 */}
+        <Box
+          gridColumn="span 8"
+          gridRow="span 3"
+          backgroundColor={colors.primary[400]}
+          p="30px"
+        >
+          <Typography variant="h5" fontWeight="600">
+            Доход по месяцам
+          </Typography>
+          
+            <Box height="400px" mt="-20px">
+            <LineChart />          
+          </Box>
+        </Box>
+        <Box
+          gridColumn="span 4"
+          gridRow="span 3"
+          backgroundColor={colors.primary[400]}
+        >
+          <Typography
+            variant="h5"
+            fontWeight="600"
+            sx={{ padding: "30px 30px 0 30px" }}
+          >
+            Аналитика
+          </Typography>
+          <Box height="500px" mt="-20px">
+          {/* <MyResponsiveRadar data={radarData} />           */}
+          </Box>
+        </Box>
+
+        {/* ROW 5 */}
         <Box
           gridColumn="span 6"
           gridRow="span 4"
@@ -242,11 +353,11 @@ const Dashboard = () => {
           p="30px"
         >
           <Typography variant="h5" fontWeight="600">
-            Круговая диаграмма
+            Доход от различных категорий
           </Typography>
           
             <Box height="500px" mt="-20px">
-          <PieChart isDashboard={true} users={data}/>          
+          <PieChart isDashboard={true} data={categoryIncomeData}/>          
           </Box>
         </Box>
         <Box
@@ -262,7 +373,7 @@ const Dashboard = () => {
             Радарная диаграмма
           </Typography>
           <Box height="500px" mt="-20px">
-          <MyResponsiveRadar data={data} />          
+          <MyResponsiveRadar data={radarData} />          
           </Box>
         </Box>
       </Box>

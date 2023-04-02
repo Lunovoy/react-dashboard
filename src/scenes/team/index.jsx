@@ -18,17 +18,17 @@ const Team = () => {
 
   const [tags, setTags] = useState([])
 
-  const getFilteredData = async () => {
-    const stringTags = tags.map(item => `${item}`)
-    const otvet = await axios.post('http://localhost:8000/api/v1/aspirants-filter-technologies/',{ 
-      technologies: stringTags
-    });
-    const newData = otvet.data;
-    setData(newData)
-  }
+  // const getFilteredData = async () => {
+  //   const stringTags = tags.map(item => `${item}`)
+  //   const otvet = await axios.post('http://localhost:8000/api/v1/aspirants-filter-technologies/',{ 
+  //     technologies: stringTags
+  //   });
+  //   const newData = otvet.data;
+  //   setData(newData)
+  // }
 
   const goDashboard = () => {
-   const url = `list_b[]=${selectionModel.reduce((item, val) => val = val + `&list_b[]=${item}`)}`
+   const url = `list_id=${selectionModel.reduce((item, val) => val = val + `&list_id=${item}`)}`
    navigate(`dashboard?${url}`)
   }
 
@@ -40,19 +40,13 @@ const Team = () => {
   //     id: candidateID 
   //   })
   // }
-
-  // const filterCandidate = async () => {
-  //   const newCandidates = await axios.post('http://localhost:8000/api/v1/aspirants-filter-technologies/', {
-  //     id: 
-  //   })
-  // }
   
-
   const [data, setData] = useState([])
   
   const getData = async () => {
-    const api_url = await axios.get(`http://localhost:8000/api/v1/aspirants/?format=json`);
-    const data = api_url.data;    
+    const api_url = await axios.get(`http://localhost:8000/api/companies/?format=json`);
+    const data = api_url.data;
+    console.log(data)
     return data
   }
 
@@ -62,35 +56,26 @@ const Team = () => {
     { field: "id", headerName: "ID" },
     {
       field: "name",
-      headerName: "ФИО",
+      headerName: "Название компании",
       flex: 1,
       cellClassName: "name-column--cell",
     },
     {
-      field: "age",
-      headerName: "Возраст",
+      field: "supplier_inn",
+      headerName: "ИНН",
       type: "number",
       headerAlign: "left",
       align: "left",
     },
     {
-      field: "technologies",
-      headerName: "Стэк технологий",
+      field: "supplier_kpp",
+      headerName: "КПП",
+      type: "number",
       flex: 1,
     },
     {
-      field: "gpa",
-      headerName: "Ср. балл диплома",
-      flex: 1,
-    },
-    {
-      field: "achievenments",
-      headerName: "Достижения",
-      flex: 1,
-    },
-    {
-      field: "email",
-      headerName: "Эл. почта",
+      field: "okved",
+      headerName: "ОКВЭД",
       flex: 1,
     },
   ];
@@ -103,12 +88,12 @@ const Team = () => {
   }, [])
     return (
     <Box m="20px">
-      <Header title="Кандидаты" subtitle="Выберите кандидатов для сравнения" />
-      <Combobox tags={tags} setTags={setTags}> </Combobox>
+      <Header title="Кандидаты" subtitle="Выберите поставщика" />
+      {/* <Combobox tags={tags} setTags={setTags}> </Combobox> */}
       <Box display="flex" justifyContent="space-between" mt="10px">
-              <Button onClick={getFilteredData} type="submit" color="secondary" variant="contained">
+              {/* <Button onClick={getFilteredData} type="submit" color="secondary" variant="contained">
                 Подтвердить
-              </Button>
+              </Button> */}
               <Button
             sx={{
               backgroundColor: colors.blueAccent[700],
@@ -119,7 +104,7 @@ const Team = () => {
             }}
             onClick={goDashboard}
           >
-            Перейти к сравнению
+            Перейти к дашборду
           </Button>
             </Box>
       

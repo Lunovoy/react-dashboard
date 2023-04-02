@@ -5,21 +5,21 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 // import { mockBarData as data } from "../data/mockData";
 
-const BarChart = ({ isDashboard = false, users }) => {
+const BarChart = ({ isDashboard = false, data }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  const getData = async () => {
-    const api_url = await axios.get(`http://localhost:8000/api/v1/aspirants/?format=json`);
-    const data = api_url.data;    
-    return data
-  }
+  // const getData = async () => {
+  //   const api_url = await axios.get(`http://localhost:8000/api/v1/aspirants/?format=json`);
+  //   const data = api_url.data;    
+  //   return data
+  // }
 
 
 
   return (
     <ResponsiveBar
-      data={users}
+      data={data}
       theme={{
         // added
         axis: {
@@ -49,8 +49,8 @@ const BarChart = ({ isDashboard = false, users }) => {
           },
         },
       }}
-      keys={["score"]}
-      indexBy="name"
+      keys={["moneyIncome"]}
+      indexBy="year"
       margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
       padding={0.3}
       valueScale={{ type: "linear" }}
@@ -138,3 +138,22 @@ const BarChart = ({ isDashboard = false, users }) => {
 };
 
 export default BarChart;
+
+let data2 = [
+{
+  name: "Москва",
+  score: 45,
+},
+{
+  name: "СПБ",
+  score: 28,
+},
+{
+  name: "Иркутск",
+  score: 10,
+},
+{
+  name: "Новосибирск",
+  score: 7,
+},
+]

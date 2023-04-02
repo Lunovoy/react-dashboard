@@ -4,22 +4,17 @@ import { useTheme } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { mockPieData as data01 } from "../data/mockData";
+import React, { Component } from 'react';
 
-const PieChart = ({isDashboard = false, users}) => {
+const PieChart = ({isDashboard = false, data}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  const getData = async () => {
-    const api_url = await axios.get(`http://localhost:8000/api/v1/aspirants/?format=json`);
-    const data = api_url.data;    
-    return data
-  }
-
   return (
     <ResponsivePie
-    data={users}
-    id="name"
-    value= "score"
+    data={data}
+    id="category"
+    value= "moneyIncome"
       theme={{
         axis: {
           domain: {
@@ -88,33 +83,11 @@ const PieChart = ({isDashboard = false, users}) => {
           spacing: 10,
         },
       ]}
-      // legends={[
-      //   {
-      //     anchor: "left",
-      //     direction: "column",
-      //     justify: false,
-      //     translateX: 0,
-      //     translateY: 56,
-      //     itemsSpacing: 1,
-      //     itemWidth: 100,
-      //     itemHeight: 18,
-      //     itemTextColor: "#999",
-      //     itemDirection: "left-to-right",
-      //     itemOpacity: 1,
-      //     symbolSize: 18,
-      //     symbolShape: "circle",
-      //     effects: [
-      //       {
-      //         on: "hover",
-      //         style: {
-      //           itemTextColor: "#000",
-      //         },
-      //       },
-      //     ],
-      //   },
-      // ]}
+      
     />
   );
 };
 
 export default PieChart;
+
+
