@@ -22,6 +22,7 @@ import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import MyResponsiveRadar from "../../components/RadarChart";
+import SuperBarChart from "../../components/SuperBarChart";
 
 const Dashboard = () => {
   const theme = useTheme();
@@ -279,43 +280,10 @@ const Dashboard = () => {
             </Box>
           ))}
         </Box>
-        {/* ROW 3 */}
-        <Box
-          gridColumn="span 10"
-          gridRow="span 4"
-          backgroundColor={colors.primary[400]}
-        >
-          <Box
-            mt="25px"
-            p="0 30px"
-            display="flex "
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Box>
-              <Typography
-                variant="h5"
-                fontWeight="600"
-                color={colors.grey[100]}
-              >
-                Прогноз на следующий год
-              </Typography>
-              <Typography
-                variant="h3"
-                fontWeight="bold"
-                color={colors.greenAccent[500]}
-              >
-              </Typography>
-            </Box>
-          </Box>
-          <Box height="400px" m="-20px 0 0 0">
-          {/* <LineChart /> */}
-                       
-          </Box>
-        </Box>
+        
         {/* ROW 4 */}
         <Box
-          gridColumn="span 8"
+          gridColumn="span 6"
           gridRow="span 3"
           backgroundColor={colors.primary[400]}
           p="30px"
@@ -329,7 +297,7 @@ const Dashboard = () => {
           </Box>
         </Box>
         <Box
-          gridColumn="span 4"
+          gridColumn="span 6"
           gridRow="span 3"
           backgroundColor={colors.primary[400]}
         >
@@ -338,12 +306,13 @@ const Dashboard = () => {
             fontWeight="600"
             sx={{ padding: "30px 30px 0 30px" }}
           >
-            Аналитика
+            Сравнение доходов компании относительно общего рынка в определенной категории
           </Typography>
-          <Box height="500px" mt="-20px">
-          {/* <MyResponsiveRadar data={radarData} />           */}
+          <Box height="400px" m="-20px 0 0 0">
+          <SuperBarChart />            
           </Box>
         </Box>
+        
 
         {/* ROW 5 */}
         <Box
@@ -370,7 +339,7 @@ const Dashboard = () => {
             fontWeight="600"
             sx={{ padding: "30px 30px 0 30px" }}
           >
-            Радарная диаграмма
+            Радарная диаграмма развития компании по сравнению с прошлым годом
           </Typography>
           <Box height="500px" mt="-20px">
           <MyResponsiveRadar data={radarData} />          

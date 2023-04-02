@@ -119,7 +119,6 @@ export default LineChart;
 let mockData = [
   {
     id: "2020",
-    color: tokens("dark").greenAccent[500],
     data: [
       {
         x: "Январь",
@@ -173,7 +172,6 @@ let mockData = [
   },
   {
     id: "2021",
-    color: tokens("dark").blueAccent[300],
     data: [
       {
         x: "Январь",
@@ -227,7 +225,6 @@ let mockData = [
   },
   {
     id: "2022",
-    color: tokens("dark").redAccent[200],
     data: [
       {
         x: "Январь",
